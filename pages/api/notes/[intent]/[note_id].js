@@ -90,6 +90,8 @@ const note_post = async ({note_id, content = '', title = ''}) => {
 			Key : `contents/${note_id_act}.txt`
 		}
 
+		console.log('note_post() params: ',params)
+
 		s3.upload(params, function (err, data) {
 			
 			if (err) { console.log("Error", err); reject(err) }
@@ -201,12 +203,8 @@ const note_process = async (req, res) => {
 			let pl = await note_get_by_id(note_id)
 			res.send(pl)
 		}else{
-			if(note_id == 'null'){
-				res.send('')
-			}else{
-				let pl = await note_get_all(note_id)
-				res.send(pl)
-			}
+			let pl = await note_get_all(note_id)
+			res.send(pl)
 		}
 	}else if(intent == 'delete'){
 		if (req.method === 'POST') {

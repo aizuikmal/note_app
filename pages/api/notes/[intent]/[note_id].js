@@ -90,8 +90,6 @@ const note_post = async ({note_id, content = '', title = ''}) => {
 			Key : `contents/${note_id_act}.txt`
 		}
 
-		console.log('note_post() params: ',params)
-
 		s3.upload(params, function (err, data) {
 			
 			if (err) { console.log("Error", err); reject(err) }

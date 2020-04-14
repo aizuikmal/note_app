@@ -34,6 +34,7 @@ AWS_ACCESSKEY=xxxxxxx
 AWS_SECRET=xxxxxxxxxxxxx
 AWS_S3_BUCKET=xxxxxxxx
 ```
+Important note: you need to create a new file named "contents.json" containing "{}" (without double quote) in your S3 bucket. [NEED FIX]
 
 Then, you have to install all the Node packages requirements
 ```

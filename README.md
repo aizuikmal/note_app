@@ -2,7 +2,7 @@
 # Aizu Notes
 This is a self-hosted web app. You can write note in it. Can become your own personal pastebin, note inbox, to jot something quickly from your website.
 
-View demo here: [https://notes-demo.aizu.my/]([https://notes-demo.aizu.my/](https://notes-demo.aizu.my/))
+View demo here: https://notes-demo.aizu.my/
 
 ## Getting Started
 

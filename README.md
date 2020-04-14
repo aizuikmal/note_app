@@ -64,7 +64,7 @@ next start -p 5000
 
 ## Authors
 
-* **Aizu Ikmal** - *All the work*
+* **Aizu Ikmal**
 
 Thanks to my buddies, teach me how to code NodeJS, React & NextJS.
 

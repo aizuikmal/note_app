@@ -100,6 +100,7 @@ const Notes = ({query : query_initial_prop}) => {
 	const open_by_id = async (id) => {
 
 		console.log('open_by_id() noteId:',id)
+		
 		if(id === 'new'){
 			SET_content(true)
 		}else{

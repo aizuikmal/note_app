@@ -19,6 +19,7 @@ const note_get_by_id = async (note_id) => {
 		Bucket: s3_bucket,
 		Key : `contents/${note_id}.txt`
 	}
+
 	console.log('note_get_by_id() params: ',params)
 	
 	return new Promise((resolve,reject) => {
@@ -56,6 +57,7 @@ const note_get_all = async () => {
 	return new Promise((resolve,reject) => {
 
 		s3.getObject(params, function(err, data){
+
 			if (err){ console.error(err) }
 	
 			let index_list = JSON.parse(data.Body.toString())
@@ -82,17 +84,15 @@ const note_post = async ({note_id, content = '', title = ''}) => {
 			note_id_act = note_id
 		}
 
-		var filePath = `contents/${note_id_act}.txt`
 		var params = {
 			Bucket: s3_bucket,
 			Body : content,
-			Key : filePath
+			Key : `contents/${note_id_act}.txt`
 		}
+
 		s3.upload(params, function (err, data) {
-			if (err) {
-				console.log("Error", err);
-				reject(err)
-			}
+			
+			if (err) { console.log("Error", err); reject(err) }
 
 			if (data) {
 				console.log("Uploaded in:", data.Location)
@@ -101,9 +101,7 @@ const note_post = async ({note_id, content = '', title = ''}) => {
 			}
 		})
 
-
 	})
-
 
 }
 
@@ -111,17 +109,14 @@ const note_delete = async ({note_id}) => {
 
 	return new Promise((resolve,reject) => {
 
-		var filePath = `contents/${note_id}.txt`
 		var params = {
 			Bucket: s3_bucket,
-			Key : filePath
+			Key : `contents/${note_id}.txt`
 		}
 
 		s3.deleteObject(params, function (err, data) {
-			if (err) {
-				console.log("Error", err);
-				reject(err)
-			}
+
+			if (err) { console.log("Error", err); reject(err) }
 
 			if (data) {
 				console.log("Uploaded in:", data.Location)
@@ -161,10 +156,8 @@ const note_update_index_delete = async (note_id_act) => {
 			console.log('index updated')
 		})
 
-
 	})
 	
-
 }
 
 const note_update_index = async (note_id_act,title) => {
@@ -231,15 +224,3 @@ const note_process = async (req, res) => {
 }
 
 export default note_process
-
-
-
-
-
-
-
-
-
-
-
-

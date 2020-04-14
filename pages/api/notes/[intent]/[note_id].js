@@ -201,8 +201,12 @@ const note_process = async (req, res) => {
 			let pl = await note_get_by_id(note_id)
 			res.send(pl)
 		}else{
-			let pl = await note_get_all(note_id)
-			res.send(pl)
+			if(note_id == 'null'){
+				res.send('')
+			}else{
+				let pl = await note_get_all(note_id)
+				res.send(pl)
+			}
 		}
 	}else if(intent == 'delete'){
 		if (req.method === 'POST') {

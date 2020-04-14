@@ -1,6 +1,6 @@
 
 # Aizu Notes
-This is a self-hosted web app. You can write note in it.
+This is a self-hosted web app. You can write note in it. Can become your own personal pastebin, note inbox, to jot something quickly from your website.
 
 ## Getting Started
 

@@ -9,12 +9,14 @@ AWS.config.update({
 	secretAccessKey: process.env.AWS_SECRET
 })
 
+const s3_bucket = process.env.AWS_S3_BUCKET
+
 const s3 = new AWS.S3()
 
 const note_get_by_id = async (note_id) => {
 
 	var params = {
-		Bucket: 'aizu-notes',
+		Bucket: s3_bucket,
 		Key : `contents/${note_id}.txt`
 	}
 	console.log('note_get_by_id() params: ',params)
@@ -28,7 +30,7 @@ const note_get_by_id = async (note_id) => {
 		
 				if(data !== null){
 					let content = data.Body.toString()
-					// console.log('note_get_by_id() CONTENT ',content)
+
 					resolve(content)
 				}else{
 					resolve('')
@@ -47,7 +49,7 @@ const note_get_by_id = async (note_id) => {
 const note_get_all = async () => {
 
 	var params = {
-		Bucket: 'aizu-notes',
+		Bucket: s3_bucket,
 		Key : `contents.json`
 	}
 	
@@ -57,9 +59,6 @@ const note_get_all = async () => {
 			if (err){ console.error(err) }
 	
 			let index_list = JSON.parse(data.Body.toString())
-	
-			// console.log('note_get_all() ',data.Body.toString())
-			// console.log('note_get_all() JSON ',index_list)
 			
 			resolve(index_list)
 	
@@ -83,19 +82,9 @@ const note_post = async ({note_id, content = '', title = ''}) => {
 			note_id_act = note_id
 		}
 
-		// let title
-		// const content_lines = content.split("\n")
-		// const firstline = content_lines[0]
-		// if(firstline.length > 30){
-		// 	title = firstline.substr(0,30)
-		// }else{
-		// 	title = firstline
-		// }
-
 		var filePath = `contents/${note_id_act}.txt`
 		var params = {
-			Bucket: 'aizu-notes',
-			// Body : fs.createReadStream(filePath),
+			Bucket: s3_bucket,
 			Body : content,
 			Key : filePath
 		}
@@ -124,9 +113,10 @@ const note_delete = async ({note_id}) => {
 
 		var filePath = `contents/${note_id}.txt`
 		var params = {
-			Bucket: 'aizu-notes',
+			Bucket: s3_bucket,
 			Key : filePath
 		}
+
 		s3.deleteObject(params, function (err, data) {
 			if (err) {
 				console.log("Error", err);
@@ -140,7 +130,6 @@ const note_delete = async ({note_id}) => {
 			}
 		})
 
-
 	})
 
 
@@ -150,24 +139,19 @@ const note_delete = async ({note_id}) => {
 const note_update_index_delete = async (note_id_act) => {
 
 	var params = {
-		Bucket: 'aizu-notes',
+		Bucket: s3_bucket,
 		Key : `contents.json`
 	}
 
 	s3.getObject(params, function(err, data){
+
 		if (err){ console.error(err) }
 		
-		// console.log('index_list original: ',data.Body.toString())
-
 		let index_list = JSON.parse(data.Body.toString())
 		delete index_list[note_id_act]
 
-		// console.log('index_list (json): ',index_list)
-		// console.log('index_list (stringify): ',JSON.stringify(index_list))
-
-
 		const upload_params = {
-			Bucket: 'aizu-notes',
+			Bucket: s3_bucket,
 			Body : JSON.stringify(index_list),
 			Key : `contents.json`
 		}
@@ -186,27 +170,23 @@ const note_update_index_delete = async (note_id_act) => {
 const note_update_index = async (note_id_act,title) => {
 
 	var params = {
-		Bucket: 'aizu-notes',
+		Bucket: s3_bucket,
 		Key : `contents.json`
 	}
 
 	s3.getObject(params, function(err, data){
+
 		if (err){ console.error(err) }
-		
-		// console.log('index_list original: ',data.Body.toString())
 
 		let index_list = JSON.parse(data.Body.toString())
 		index_list[note_id_act] = { title }
 
-		// console.log('index_list (json): ',index_list)
-		// console.log('index_list (stringify): ',JSON.stringify(index_list))
-
-
 		const upload_params = {
-			Bucket: 'aizu-notes',
+			Bucket: s3_bucket,
 			Body : JSON.stringify(index_list),
 			Key : `contents.json`
 		}
+
 		s3.upload(upload_params, function (err, data) {
 			if (err) { console.log("Error", err) }
 			console.log("Uploaded index:", data.Location)
